@@ -17,7 +17,7 @@ int main(int ac, char **av) {
     Category	*root;
 
     root = saveManager.getCategories();
-    root->debugLinks();
+    root->debugLinks(0);
   }
   catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << std::endl;

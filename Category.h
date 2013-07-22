@@ -9,7 +9,7 @@
 class Category
 {
  private:
-  std::list<Category *>	listCategory;
+  std::list<Category *>	listCategories;
   std::string		name;
   std::list<std::pair<std::string, std::string> > listLinks;
   
@@ -17,7 +17,9 @@ class Category
   Category(std::string &name);
   Category(const char *name);
   void	addLink(const std::string &name, const std::string &content);
-  void	debugLinks(void) const;
+  Category *addNewCategory(std::string name);
+  void	debugLinks(int level) const;
+  const std::string	&getName(void) const;
 };
 
 #endif

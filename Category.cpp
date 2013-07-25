@@ -3,7 +3,7 @@
 
 #include "Category.h"
 
-Category::Category(std::string &name) {
+Category::Category(const std::string &name) {
   this->name = name;
 }
 
@@ -18,7 +18,7 @@ void Category::addLink(const std::string &name, const std::string &content) {
 }
 
 void Category::debugLinks(int level) const {
-  std::list<std::pair<std::string, std::string> >::const_iterator it = listLinks.begin();
+  listPairString::const_iterator it = listLinks.begin();
   std::list<Category *>::const_iterator itList = listCategories.begin();
 
   std::cout << std::string(level, '-') << " " << this->name << std::endl;
@@ -42,4 +42,13 @@ Category	*Category::addNewCategory(std::string name) {
 
 const std::string	&Category::getName(void) const {
   return name;
+}
+
+std::list<Category *>	Category::getListCategories(void) const {
+  return listCategories;
+}
+
+
+listPairString		Category::getListLinks(void) const {
+  return listLinks;
 }

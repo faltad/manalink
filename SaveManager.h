@@ -6,10 +6,11 @@
 #include <string>
 #include "Category.h"
 
-extern const char	*DEFAULT_FILENAME;
-
 class SaveManager
 {
+
+ public:
+  static const char	*DEFAULT_FILENAME;
  private:
   Category	*cat;
   std::ifstream	file;
@@ -18,10 +19,12 @@ class SaveManager
   SaveManager(const char *filename);
   ~SaveManager();
   Category *	getCategories(void);
+  std::string	saveFile(Category *root);
 
  private:
   std::string	removeSpaces(const std::string &str) const;
   void		parseLine(std::string buff, Category *cat);
+  void		generateSaveData(Category *cat, std::string &data, bool printNameCat);
 };
 
 #endif

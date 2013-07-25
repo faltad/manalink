@@ -9,7 +9,7 @@ int main(int ac, char **av) {
   if (ac > 1) {
     filename = av[1];
   } else {
-    filename = DEFAULT_FILENAME;
+    filename = SaveManager::DEFAULT_FILENAME;
   }
   
   try {
@@ -17,7 +17,8 @@ int main(int ac, char **av) {
     Category	*root;
 
     root = saveManager.getCategories();
-    root->debugLinks(0);
+    //root->debugLinks(0);
+    std::cout << "Save :    " << saveManager.saveFile(root) << std::endl;
   }
   catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << std::endl;

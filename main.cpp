@@ -1,6 +1,7 @@
 #include <exception>
 #include <iostream>
 #include "Category.h"
+#include "Manalink.h"
 #include "SaveManager.h"
 
 int main(int ac, char **av) {
@@ -15,10 +16,10 @@ int main(int ac, char **av) {
   try {
     SaveManager saveManager(filename);
     Category	*root;
+    Manalink	manalink;
 
     root = saveManager.getCategories();
-    //root->debugLinks(0);
-    std::cout << "Save :    " << saveManager.saveFile(root) << std::endl;
+    manalink.run(root);
   }
   catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << std::endl;

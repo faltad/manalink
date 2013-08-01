@@ -6,7 +6,9 @@ LFLAGS = -lncurses
 
 SOURCES = main.cpp\
 	Category.cpp\
-	SaveManager.cpp
+	SaveManager.cpp\
+	Manalink.cpp\
+	Window.cpp
 
 OBJS = $(SOURCES:.cpp=.o)
 

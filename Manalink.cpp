@@ -69,15 +69,22 @@ void	Manalink::displayNewCat(Category *cat) {
 // Move to the parent category
 // or reprint the current category if the current state
 // is to show links
-void	Manalink::handleBackspace(void) {
+Category	*Manalink::handleBackspace(Category *cat) {
+  Category *prevCat;
+
   if (linkState == true) {
     win->clear();
     win->welcome();
     win->print();
     linkState = false;
   } else {
-    // todo: get the parent category
+    prevCat = cat->getParent();
+    if (prevCat != cat) {
+      cat = prevCat;
+      displayNewCat(cat);
+    }
   }
+  return cat;
 }
 
 // if the user clicks on a category, change the cat argument
@@ -126,7 +133,7 @@ void	Manalink::run(Category *cat) {
     } else if ((c == 10 || c == KEY_RIGHT) && linkState == false) {
       cat = handleSelection(cat);
     } else if (c == 8 || c == 127) { // backspace
-      handleBackspace();
+      cat = handleBackspace(cat);
     } else if (c == 'q') { // quit
       flag = false;
     }

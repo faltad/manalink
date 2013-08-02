@@ -25,6 +25,9 @@ class Category
   const std::string	&getName(void) const;
   std::list<Category *>	getListCategories(void) const;
   listPairString	getListLinks(void) const;
-};
+  Category *getParent(void) const;
 
+ private:
+  void setParent(Category *parent);
+};
 #endif

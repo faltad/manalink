@@ -21,7 +21,7 @@ class Manalink
   pairString	getElementFromList(int n, listPairString l);
   Category	*getElementFromList(int n, std::list<Category *> l);
   void	displayNewCat(Category *cat);
-  void	handleBackspace(void);
+  Category	*handleBackspace(Category *cat);
   Category	*handleSelection(Category *cat);
 };
 

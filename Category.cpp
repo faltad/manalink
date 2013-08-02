@@ -3,11 +3,11 @@
 
 #include "Category.h"
 
-Category::Category(const std::string &name) {
+Category::Category(const std::string &name) : preCat(this) {
   this->name = name;
 }
 
-Category::Category(const char *name) {
+Category::Category(const char *name) : preCat(this) {
   this->name = std::string(name);
 }
 
@@ -36,6 +36,7 @@ Category	*Category::addNewCategory(std::string name) {
   Category	*cat;
 
   cat = new Category(name);
+  cat->setParent(this);
   listCategories.push_back(cat);
   return cat;
 }
@@ -51,4 +52,12 @@ std::list<Category *>	Category::getListCategories(void) const {
 
 listPairString		Category::getListLinks(void) const {
   return listLinks;
+}
+
+void Category::setParent(Category *parent) {
+  preCat = parent;
+}
+
+Category *Category::getParent(void) const {
+  return preCat;
 }

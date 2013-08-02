@@ -1,10 +1,13 @@
+#include "Category.h"
 #include "Manalink.h"
 
 #include <curses.h>
+#include <exception>
 #include <iostream>
+#include <stdexcept>
 
-Manalink::Manalink(void) {
-  win = NULL;
+Manalink::Manalink(void) : win(NULL) {
+  linkState = false;
 }
 
 void	Manalink::displayCategories(Category *cat) {
@@ -29,27 +32,108 @@ void	Manalink::displayLinks(Category *cat) {
   }
 }
 
+pairString	Manalink::getElementFromList(int n, listPairString l) {
+  listPairString::const_iterator it = l.begin();
+  int				 i;
+
+  for (i = 0; it != l.end() && i <= n; it++) {
+    if (i == n)
+      return (*it);
+    i++;
+  }
+  return *(l.begin()); 
+}
+
+Category	*Manalink::getElementFromList(int n, std::list<Category *> l) {
+  std::list<Category *>::const_iterator it = l.begin();
+  int				 i;
+
+  for (i = 0; it != l.end() && i <= n; it++) {
+    if (i == n)
+      return (*it);
+    i++;
+  }
+  return *(l.begin());
+}
+
+void	Manalink::displayNewCat(Category *cat) {
+  win->clear();
+  win->clearList();
+  win->welcome();
+  displayCategories(cat);
+  displayLinks(cat);
+  win->print();
+}
+
+
+// Move to the parent category
+// or reprint the current category if the current state
+// is to show links
+void	Manalink::handleBackspace(void) {
+  if (linkState == true) {
+    win->clear();
+    win->welcome();
+    win->print();
+    linkState = false;
+  } else {
+    // todo: get the parent category
+  }
+}
+
+// if the user clicks on a category, change the cat argument
+// if the user clicks on a link, it will simply print it
+Category	*Manalink::handleSelection(Category *cat) {
+  listPairString	listLinks = cat->getListLinks();
+  std::list<Category *>	listCategories = cat->getListCategories();
+  pairString	pStr;
+  Category *   newCat;
+  unsigned int	offset;
+    
+  offset = win->getCursorPos();
+  win->clear();
+  if (offset + 1 > listCategories.size()) {
+    offset -= listCategories.size();
+    if (offset < listLinks.size()) {
+      preCat = cat;    
+      pStr = getElementFromList(offset, listLinks);
+      win->clear();
+      win->welcome();
+      win->printLink(pStr);
+      linkState = true;
+    } else {
+      throw std::invalid_argument("Link list index out of boundaries");
+    }
+  } else {
+    preCat = cat;
+    newCat = getElementFromList(offset, listCategories);
+    displayNewCat(newCat);
+    cat = newCat;
+  }
+  return cat;
+}
+
 void	Manalink::run(Category *cat) {
   int	c;
   bool flag = true;
 
   win = new Window();
-  win->welcome();
-  displayCategories(cat);
-  displayLinks(cat);
-  win->print();
+  preCat = cat;
+  displayNewCat(cat);
   while (flag) {
     c = win->getChar();
-    if (c == KEY_UP || c == KEY_DOWN) {
+    if ((c == KEY_UP || c == KEY_DOWN) && linkState == false) {
       win->updateCursorPos(c);
-    } else {
-      win->putChar(c);
+    } else if ((c == 10 || c == KEY_RIGHT) && linkState == false) {
+      cat = handleSelection(cat);
+    } else if (c == 8 || c == 127) { // backspace
+      handleBackspace();
+    } else if (c == 'q') { // quit
+      flag = false;
     }
     refresh();
   }
 }
 
 Manalink::~Manalink(void) {
-  if (win != NULL)
-    delete win;
+  delete win;
 }

@@ -6,6 +6,7 @@
 #include <utility>
 
 typedef std::list<std::pair<std::string, std::string> > listPairString;
+typedef std::pair<std::string, std::string> pairString;
 
 class Category
 {
@@ -13,6 +14,7 @@ class Category
   std::list<Category *>	listCategories;
   std::string		name;
   listPairString	listLinks;
+  Category		*preCat;
   
  public:
   Category(const std::string &name);

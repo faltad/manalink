@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include "Category.h"
+
 class Window
 {
  private:
@@ -25,6 +27,10 @@ class Window
   void	print(void);
   void	addStrToBuffer(std::string str);
   void  updateCursorPos(int);
+  const int getCursorPos(void) const;
+  void	clear(void);
+  void  clearList(void);
+  void	printLink(pairString p);
 
  private:
   WINDOW *createNewWin(int height, int width, int starty, int startx);

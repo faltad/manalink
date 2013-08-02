@@ -88,10 +88,31 @@ void	Window::updateCursorPos(int c) {
 }
 
 void	Window::welcome(void) {
-  std::string	welcomeStr = "Manalink";
+  static const std::string	welcomeStr = "Manalink";
 
   wbkgd(top, COLOR_PAIR(1));
   mvwprintw(top, 0, col / 2 - (welcomeStr.length() / 2), welcomeStr.c_str());
   wbkgd(bot, COLOR_PAIR(1));
   mvwprintw(bot, 0, col / 2 - (welcomeStr.length() / 2), welcomeStr.c_str());
+}
+
+const int	Window::getCursorPos(void) const {
+  return cursorPos;
+}
+
+void		Window::clear(void) {
+  werase(stdscr);
+}
+
+void		Window::clearList(void) {
+  cursorPos = 0;
+  vStr.clear();
+  vSize = 0;
+}
+
+void		Window::printLink(pairString p) {
+  wattron(stdscr, A_UNDERLINE);
+  mvwprintw(stdscr, 2, col / 2 - (p.first.length() / 2), p.first.c_str());
+  wattroff(stdscr, A_UNDERLINE);
+  mvwprintw(stdscr, 5, 3, p.second.c_str());
 }

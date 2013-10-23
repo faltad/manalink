@@ -96,8 +96,8 @@ Category	*Manalink::handleSelection(Category *cat) {
   Category *   newCat;
   unsigned int	offset;
     
-  offset = win->getCursorPos();
   win->clear();
+  offset = win->getCursorPos();
   if (offset + 1 > listCategories.size()) {
     offset -= listCategories.size();
     if (offset < listLinks.size()) {
@@ -107,8 +107,8 @@ Category	*Manalink::handleSelection(Category *cat) {
       win->welcome();
       win->printLink(pStr);
       linkState = true;
-    } else {
-      throw std::invalid_argument("Link list index out of boundaries");
+    } else {    
+      displayNewCat(cat);
     }
   } else {
     preCat = cat;
@@ -117,6 +117,33 @@ Category	*Manalink::handleSelection(Category *cat) {
     cat = newCat;
   }
   return cat;
+}
+
+void	Manalink::handleRemoveItem(Category *cat) {
+  int	c;
+  unsigned int	offset;
+  listPairString	listLinks = cat->getListLinks();
+  std::list<Category *>	listCategories = cat->getListCategories();
+
+  win->displayBot("Are you sure you want to remove this item? Y/[n]");
+  c = win->getChar();
+  if (c == 'y' || c == 'Y') {
+    win->clear();
+    offset = win->getCursorPos();
+    if (offset + 1 > listCategories.size()) {
+      offset -= listCategories.size();
+      if (offset < listLinks.size()) {
+	cat->deleteLink(offset);
+      } else {
+	throw std::invalid_argument("Link list index out of boundaries");
+      }
+    } else {
+      cat->deleteCategory(offset);
+    }
+    displayNewCat(cat);
+  } else {
+    win->welcome();
+  }
 }
 
 void	Manalink::run(Category *cat) {
@@ -132,8 +159,10 @@ void	Manalink::run(Category *cat) {
       win->updateCursorPos(c);
     } else if ((c == 10 || c == KEY_RIGHT) && linkState == false) {
       cat = handleSelection(cat);
-    } else if (c == 8 || c == 127) { // backspace
+    } else if (c == 8 || c == 127 || c == KEY_LEFT) { // backspace
       cat = handleBackspace(cat);
+    } else if (c == 'r' && linkState == false) {
+      handleRemoveItem(cat);
     } else if (c == 'q') { // quit
       flag = false;
     }

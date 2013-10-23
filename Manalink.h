@@ -23,6 +23,7 @@ class Manalink
   void	displayNewCat(Category *cat);
   Category	*handleBackspace(Category *cat);
   Category	*handleSelection(Category *cat);
+  void		 handleRemoveItem(Category *cat);
 };
 
 #endif

@@ -31,6 +31,7 @@ class Window
   void	clear(void);
   void  clearList(void);
   void	printLink(pairString p);
+  void	displayBot(const std::string &str);
 
  private:
   WINDOW *createNewWin(int height, int width, int starty, int startx);

@@ -26,8 +26,13 @@ class Category
   std::list<Category *>	getListCategories(void) const;
   listPairString	getListLinks(void) const;
   Category *getParent(void) const;
+  void	deleteElementFromList(unsigned int offset, std::list<Category *> l);
+  void	deleteElementFromList(unsigned int offset, listPairString l);
+  void	deleteLink(unsigned int offset);
+  void	deleteCategory(unsigned int offset);
 
  private:
   void setParent(Category *parent);
+  void	deleteAllCategories(void);
 };
 #endif

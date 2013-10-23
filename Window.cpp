@@ -53,9 +53,8 @@ void	Window::print(void) {
   std::vector<std::string>::const_iterator it;
   int		currentLine;
 
-  it = vStr.begin();
   currentLine = 1;
-  while (it != vStr.end()) {
+  for (it = vStr.begin(); it != vStr.end(); it++) {
     if (cursorPos == currentLine - 1) {
       wattron(stdscr, A_STANDOUT);
     }
@@ -64,7 +63,6 @@ void	Window::print(void) {
       wattroff(stdscr, A_STANDOUT);
     }
     currentLine++;
-    it++;
   }
 }
 
@@ -81,19 +79,30 @@ void	Window::updateCursorPos(int c) {
   }
   if (cursorPos < 0)
     cursorPos = vSize - 1;
-  mvwprintw(stdscr, curCursorPos + 1, 3, vStr[curCursorPos].c_str());
-  wattron(stdscr, A_STANDOUT);
-  mvwprintw(stdscr, cursorPos + 1, 3, vStr[cursorPos].c_str());
-  wattroff(stdscr, A_STANDOUT);
+  if (vSize > 0) {
+    mvwprintw(stdscr, curCursorPos + 1, 3, vStr[curCursorPos].c_str());
+    wattron(stdscr, A_STANDOUT);
+    mvwprintw(stdscr, cursorPos + 1, 3, vStr[cursorPos].c_str());
+    wattroff(stdscr, A_STANDOUT);
+  }
 }
 
 void	Window::welcome(void) {
   static const std::string	welcomeStr = "Manalink";
 
+  werase(top);
+  werase(bot);
   wbkgd(top, COLOR_PAIR(1));
   mvwprintw(top, 0, col / 2 - (welcomeStr.length() / 2), welcomeStr.c_str());
   wbkgd(bot, COLOR_PAIR(1));
   mvwprintw(bot, 0, col / 2 - (welcomeStr.length() / 2), welcomeStr.c_str());
+  wrefresh(bot);
+}
+
+void	Window::displayBot(const std::string &str) {
+  werase(bot);
+  mvwprintw(bot, 0, col / 2 - (str.length() / 2), str.c_str());
+  wrefresh(bot);
 }
 
 const int	Window::getCursorPos(void) const {

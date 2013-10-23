@@ -61,3 +61,30 @@ void Category::setParent(Category *parent) {
 Category *Category::getParent(void) const {
   return preCat;
 }
+
+void	Category::deleteLink(unsigned int offset) {
+  listPairString::iterator it;
+
+  it = listLinks.begin();
+  std::advance(it, offset);
+  listLinks.erase(it);  
+}
+
+void	Category::deleteCategory(unsigned int offset) {
+  std::list<Category *>::iterator it;
+
+  it = listCategories.begin();
+  std::advance(it, offset);
+  (*it)->deleteAllCategories();
+  delete (*it);
+  listCategories.erase(it);
+}
+
+void	Category::deleteAllCategories(void) {
+  std::list<Category *>::iterator it;
+
+  for (it = listCategories.begin(); it != listCategories.end(); it++) {
+    (*it)->deleteAllCategories();
+    delete (*it);
+  }
+}

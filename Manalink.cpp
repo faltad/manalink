@@ -146,6 +146,17 @@ void	Manalink::handleRemoveItem(Category *cat) {
   }
 }
 
+void	Manalink::handleNewCategory(Category *cat) {
+  std::string	*str;
+
+  win->displayBot("New category: ");
+  win->setupWritingBot();
+  str = win->getString(10);
+  cat->addNewCategory(*str);
+  displayNewCat(cat);
+  delete str;
+}
+
 void	Manalink::run(Category *cat) {
   int	c;
   bool flag = true;
@@ -163,6 +174,8 @@ void	Manalink::run(Category *cat) {
       cat = handleBackspace(cat);
     } else if (c == 'r' && linkState == false) {
       handleRemoveItem(cat);
+    } else if (c == 'c' && linkState == false) {
+      handleNewCategory(cat);
     } else if (c == 'q') { // quit
       flag = false;
     }

@@ -19,6 +19,7 @@ Window::Window(void) {
   vSize = 0;
   curs_set(0);
   cursorPos = 0;
+  funcDisplay = NULL;
 }
 
 WINDOW *Window::createNewWin(int height, int width, int starty, int startx)
@@ -124,4 +125,45 @@ void		Window::printLink(pairString p) {
   mvwprintw(stdscr, 2, col / 2 - (p.first.length() / 2), p.first.c_str());
   wattroff(stdscr, A_UNDERLINE);
   mvwprintw(stdscr, 5, 3, p.second.c_str());
+}
+
+std::string	*Window::getString(int esc) {
+  bool		flag;
+  int		c;
+  std::string	*buffer;
+
+  buffer = new std::string;
+  flag = true;
+  while (flag) {
+    c = this->getChar();
+    if (c == esc) {
+      flag = false;
+    } else {
+      if (std::isprint(c) != 0) {
+	buffer->append(1, static_cast<char>(c));
+	(this->*funcDisplay)(buffer);
+      }
+    }
+  }
+  return buffer;
+}
+
+void		Window::writingBotManagement(std::string *buff) {
+  std::string	str;
+
+  str = "New category: ";
+  if (str.size() > COLS - 5) {
+    
+    str = *buff;
+  } else {
+    str += *buff;
+  }
+  if (str.size() > COLS - 5) {
+    str = str.substr(str.size() - COLS + 5, COLS - 5);
+  }
+  this->displayBot(str);
+}
+
+void		Window::setupWritingBot(void) {
+  funcDisplay = &Window::writingBotManagement;
 }

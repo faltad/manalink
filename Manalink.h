@@ -24,6 +24,7 @@ class Manalink
   Category	*handleBackspace(Category *cat);
   Category	*handleSelection(Category *cat);
   void		 handleRemoveItem(Category *cat);
+  void		 handleNewCategory(Category *cat);
 };
 
 #endif

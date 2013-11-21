@@ -17,6 +17,7 @@ class Window
   int		cursorPos;
   std::vector<std::string>	vStr;
   int				vSize;
+  void		(Window::*funcDisplay)(std::string *);
 
  public:
   Window(void);
@@ -32,9 +33,12 @@ class Window
   void  clearList(void);
   void	printLink(pairString p);
   void	displayBot(const std::string &str);
+  std::string	*getString(int c);
+  void	setupWritingBot(void);
 
  private:
   WINDOW *createNewWin(int height, int width, int starty, int startx);
+  void	writingBotManagement(std::string *buff);
 };
 
 #endif

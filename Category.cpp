@@ -21,13 +21,13 @@ void Category::debugLinks(int level) const {
   listPairString::const_iterator it = listLinks.begin();
   std::list<Category *>::const_iterator itList = listCategories.begin();
 
-  std::cout << std::string(level, '-') << " " << this->name << std::endl;
+  std::cerr << std::string(level, '-') << " " << this->name << std::endl;
   while (itList != listCategories.end()) {
     (*itList)->debugLinks(level + 1);
     itList++;
   }
   while (it != listLinks.end()) {
-    std::cout << std::string(level + 1, '-') << " Name : " << (*it).first << "  description: " << (*it).second << std::endl;
+    std::cerr << std::string(level + 1, '-') << " Name : " << (*it).first << "  description: " << (*it).second << std::endl;
     it++;
   }
 }

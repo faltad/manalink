@@ -2,6 +2,7 @@
 #define MANALINK_H_
 
 #include "Category.h"
+#include "SaveManager.h"
 #include "Window.h"
 
 class Manalink
@@ -14,7 +15,7 @@ class Manalink
  public:
   Manalink(void);
   ~Manalink(void);
-  void	run(Category *);
+  void	run(Category *, SaveManager &);
  private:
   void	displayCategories(Category *cat);
   void	displayLinks(Category *cat);
@@ -25,6 +26,8 @@ class Manalink
   Category	*handleSelection(Category *cat);
   void		 handleRemoveItem(Category *cat);
   void		 handleNewCategory(Category *cat);
+  void		 handleHelp(Category *cat);
+  void		 handleSave(Category *root, SaveManager &saveManager);
 };
 
 #endif

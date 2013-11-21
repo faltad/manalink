@@ -1,18 +1,18 @@
 #include <exception>
 #include <iostream>
+#include <fstream>
 #include <stdexcept>
 #include "SaveManager.h"
 
 const char   *SaveManager::DEFAULT_FILENAME = "save.mana";
 
-SaveManager::SaveManager(const char *filename) {
+SaveManager::SaveManager(const char *filename) : _filename(filename){
   file.open(filename);
   if (!file.good())
     throw std::invalid_argument(std::string(filename) + " cannot be open");
 }
 
 SaveManager::~SaveManager() {
-  file.close();
 }
 
 std::string	SaveManager::removeSpaces(const std::string &str) const {
@@ -39,6 +39,9 @@ void		SaveManager::generateSaveData(Category *cat, std::string &data, bool print
   if (printNameCat == true) {
     data += "{" + cat->getName() + "}{";
   }
+  if (it == listCat.end() && itPair == listLinks.end()) {
+    data += "{}";
+  }
   while (it != listCat.end()) {
     generateSaveData(*it, data, true);
     it++;
@@ -54,8 +57,14 @@ void		SaveManager::generateSaveData(Category *cat, std::string &data, bool print
 
 std::string	SaveManager::saveFile(Category *root) {
   std::string	data;
+  std::ofstream	newFile;
 
+  newFile.open(_filename.c_str(), std::ios::out| std::ios::trunc);
+  if (!newFile.good())
+    throw std::invalid_argument(std::string(_filename) + " cannot be saved");
   generateSaveData(root, data, false);
+  newFile << data;
+  newFile.close();
   return data;
 }
 
@@ -101,5 +110,6 @@ Category	*SaveManager::getCategories(void) {
 
   root = new Category("/");
   parseLine("", root);
+  file.close();
   return root;
 }

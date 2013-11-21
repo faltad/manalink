@@ -19,7 +19,7 @@ int main(int ac, char **av) {
     Manalink	manalink;
 
     root = saveManager.getCategories();
-    manalink.run(root);
+    manalink.run(root, saveManager);
   }
   catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << std::endl;

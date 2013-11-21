@@ -13,7 +13,8 @@ class SaveManager
   static const char	*DEFAULT_FILENAME;
  private:
   Category	*cat;
-  std::ifstream	file;
+  std::fstream	file;
+  const	std::string	_filename;
 
  public:
   SaveManager(const char *filename);

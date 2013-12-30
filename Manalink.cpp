@@ -8,6 +8,7 @@
 
 Manalink::Manalink(void) : win(NULL) {
   linkState = false;
+  modified = false;
 }
 
 void	Manalink::displayCategories(Category *cat) {
@@ -61,6 +62,7 @@ void	Manalink::displayNewCat(Category *cat) {
   win->clearList();
   win->welcome();
   displayCategories(cat);
+  //win->addStrToBuffer(std::string(COLS - 5, '-'));
   displayLinks(cat);
   win->print();
 }
@@ -140,6 +142,7 @@ void	Manalink::handleRemoveItem(Category *cat) {
     } else {
       cat->deleteCategory(offset);
     }
+    this->modified = true;
     displayNewCat(cat);
   } else {
     win->welcome();
@@ -153,12 +156,13 @@ void	Manalink::handleNewCategory(Category *cat) {
   win->setupWritingBot();
   str = win->getString(10);
   cat->addNewCategory(*str);
+  this->modified = true;
   displayNewCat(cat);
   delete str;
 }
 
 void	Manalink::handleHelp(Category *cat) {
-  win->displayBot("c:new category, r:remove, n:new link, s:save");
+  win->displayBot("Help) c:new category, r:remove, n:new link, s:save");
 }
 
 void	Manalink::handleSave(Category *root, SaveManager &saveManager) {
@@ -168,6 +172,7 @@ void	Manalink::handleSave(Category *root, SaveManager &saveManager) {
   c = win->getChar();
   if (c == 'y' || c == 'Y') {
     win->displayBot("Saved!");
+    this->modified = false;
     saveManager.saveFile(root);	
   } else {
     win->displayBot("Canceled");
@@ -200,7 +205,8 @@ void	Manalink::run(Category *cat, SaveManager &saveManager) {
     } else if (c == 's') {
       handleSave(root, saveManager);
     } else if (c == 'q') { // quit
-      handleSave(root, saveManager);
+      if (this->modified == true)
+	handleSave(root, saveManager);
       flag = false;
     }
     refresh();

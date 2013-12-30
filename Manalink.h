@@ -11,6 +11,7 @@ class Manalink
   Window	*win;
   Category	*preCat;
   bool		linkState;
+  bool		modified;
 
  public:
   Manalink(void);
